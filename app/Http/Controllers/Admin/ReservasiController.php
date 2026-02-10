@@ -14,6 +14,9 @@ class ReservasiController extends Controller
         Reservasi::updateStatusSelesai();
 
         $reservasi = Reservasi::with(['user', 'studio', 'jadwal'])
+            ->whereHas('jadwal', function($query) {
+                $query->whereDate('tanggal', '>=', now()->toDateString());
+            })
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -127,5 +130,51 @@ class ReservasiController extends Controller
             'studioId'
         ));
     }
+
+    public function cetakLaporan(Request $request)
+    {
+    Reservasi::updateStatusSelesai();
+
+    $tanggalMulai = $request->input('tanggal_mulai');
+    $tanggalSelesai = $request->input('tanggal_selesai');
+    $studioId = $request->input('studio_id');
+
+    $reservasiQuery = Reservasi::with('studio')
+        ->whereIn('status', ['dibayar', 'selesai']);
+
+    if ($tanggalMulai) {
+        $reservasiQuery->whereDate('created_at', '>=', $tanggalMulai);
+    }
+
+    if ($tanggalSelesai) {
+        $reservasiQuery->whereDate('created_at', '<=', $tanggalSelesai);
+    }
+
+    if ($studioId) {
+        $reservasiQuery->where('studio_id', $studioId);
+    }
+
+    $reservasi = $reservasiQuery->orderBy('created_at', 'asc')->get();
+
+    $totalPendapatan = $reservasi->sum('total_biaya');
+
+    $pendapatanPerStudio = $reservasi
+        ->groupBy('studio_id')
+        ->map(function ($items) {
+            return [
+                'studio' => $items->first()->studio,
+                'total' => $items->sum('total_biaya'),
+            ];
+        });
+
+    return view('admin.laporan.cetak_pendapatan', compact(
+    'reservasi',
+    'totalPendapatan',
+    'pendapatanPerStudio',
+    'tanggalMulai',
+    'tanggalSelesai'
+));
+}
+
 
 }

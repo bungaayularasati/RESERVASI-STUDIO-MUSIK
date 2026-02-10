@@ -52,16 +52,16 @@
         </div>
 
         <div>
-            <label class="text-sm text-gray-300">Password</label>
-            <input type="password" name="password" required
+            <label class="text-sm text-gray-300">No. HP</label>
+            <input type="text" name="no_hp" value="{{ old('no_hp') }}" required
                    class="mt-1 w-full rounded-xl bg-slate-800 border border-slate-700
                           text-white px-4 py-2 focus:border-indigo-500 focus:ring-indigo-500"
-                   placeholder="••••••••">
+                   placeholder="0812xxxxxxxx">
         </div>
 
         <div>
-            <label class="text-sm text-gray-300">Konfirmasi Password</label>
-            <input type="password" name="password_confirmation" required
+            <label class="text-sm text-gray-300">Password</label>
+            <input type="password" name="password" required
                    class="mt-1 w-full rounded-xl bg-slate-800 border border-slate-700
                           text-white px-4 py-2 focus:border-indigo-500 focus:ring-indigo-500"
                    placeholder="••••••••">

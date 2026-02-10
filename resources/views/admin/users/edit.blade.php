@@ -25,6 +25,13 @@
             </div>
 
             <div class="mb-4">
+                <input type="text" name="no_hp"
+                       value="{{ $user->no_hp }}"
+                       placeholder="No. HP"
+                       class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500">
+            </div>
+
+            <div class="mb-4">
                 <input type="password" name="password"
                        placeholder="Password (kosongkan jika tidak diubah)"
                        class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500">

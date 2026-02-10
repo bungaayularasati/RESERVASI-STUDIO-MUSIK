@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="mb-4">
-    <h1 class="text-2xl font-bold">Data Reservasi & Riwayat Reservasi</h1>
-    
+    <h1 class="text-2xl font-bold">Data Reservasi</h1>
+
 </div>
 
 <div class="bg-white rounded-lg overflow-x-auto shadow">

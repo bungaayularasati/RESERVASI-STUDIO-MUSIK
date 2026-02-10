@@ -22,6 +22,11 @@
             </div>
 
             <div class="mb-4">
+                <input type="text" name="no_hp" placeholder="No. HP"
+                       class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <div class="mb-4">
                 <input type="password" name="password" placeholder="Password"
                        class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                        required>

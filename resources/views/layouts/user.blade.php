@@ -45,17 +45,6 @@
            <!-- MENU -->
 <div class="flex items-center gap-5 text-sm">
 
-    <a href="{{ route('users.dashboard') }}"
-       class="flex items-center gap-1.5 px-3 py-2 rounded-lg
-              text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition">
-        <!-- icon -->
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 12l2-2m0 0l7-7 7 7m-9 2v6"/>
-        </svg>
-        Dashboard
-    </a>
-
     <a href="{{ route('users.studio') }}"
        class="flex items-center gap-1.5 px-3 py-2 rounded-lg
               text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition">
@@ -74,6 +63,16 @@
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7H3v12a2 2 0 002 2z"/>
         </svg>
         Reservasi
+    </a>
+
+    <a href="{{ route('users.chat.index') }}"
+       class="flex items-center gap-1.5 px-3 py-2 rounded-lg
+              text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M7 8h10M7 12h6m5 8l-4-4H7a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v8"/>
+        </svg>
+        Chat Admin
     </a>
 
     <form method="POST" action="{{ route('logout') }}">

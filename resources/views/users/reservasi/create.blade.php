@@ -58,7 +58,6 @@
                 </div>
             </div>
 
-            {{-- INFO ERROR --}}
             <div id="info"
                 class="hidden rounded-lg bg-red-500/10 border border-red-500/30 px-4 py-2 text-sm text-red-300">
             </div>
@@ -71,6 +70,12 @@
                         <span id="durasi">0</span> jam
                     </span>
                 </div>
+
+                <div id="diskonInfo" class="hidden flex justify-between mb-2 text-green-400">
+                     <span>Diskon <span id="diskonPersen"></span>%</span>
+                     <span>- Rp <span id="diskonNominal">0</span></span>
+                </div>
+
                 <div class="flex justify-between items-center">
                     <span>Total Bayar</span>
                     <span class="text-lg font-bold text-white">
@@ -96,9 +101,10 @@
     </div>
 </div>
 
-{{-- SCRIPT TIDAK DIUBAH (SUDAH BENAR) --}}
+
 <script>
 const hargaPerJam = {{ $studio->harga_per_jam }};
+const diskon = {{ $diskon ?? 0 }};
 const jamMulai   = document.getElementById('jam_dimulai');
 const jamSelesai = document.getElementById('jam_selesai');
 const tanggal    = document.getElementById('tanggal');
@@ -179,7 +185,22 @@ function hitungTotal(){
 
     const durasi = (selesaiMenit - mulaiMenit) / 60;
     durasiEl.innerText = durasi;
-    totalEl.innerText = (durasi * hargaPerJam).toLocaleString('id-ID');
+
+    let total = durasi * hargaPerJam;
+
+    if (diskon > 0) {
+        const nominalDiskon = total * diskon;
+
+        document.getElementById('diskonInfo').classList.remove('hidden');
+        document.getElementById('diskonPersen').innerText = (diskon * 100);
+        document.getElementById('diskonNominal').innerText = nominalDiskon.toLocaleString('id-ID');
+
+        total = total - nominalDiskon;
+    } else {
+        document.getElementById('diskonInfo').classList.add('hidden');
+    }
+
+    totalEl.innerText = total.toLocaleString('id-ID');
 
     cekBentrok();
 }

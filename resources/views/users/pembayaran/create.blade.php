@@ -36,9 +36,26 @@
 
             <div class="mt-2 flex items-center justify-between">
                 <span class="text-[11px] text-slate-500">Total</span>
-                <span class="text-base font-bold text-emerald-600">
-                    Rp {{ number_format($reservasi->total_biaya,0,',','.') }}
-                </span>
+                <div class="text-right">
+                    @php
+                        $durasiJam = (strtotime($reservasi->jadwal->jam_selesai) - strtotime($reservasi->jadwal->jam_dimulai)) / 3600;
+                        $hargaAsli = $durasiJam * $reservasi->studio->harga_per_jam;
+                        // Kita anggap diskon jika selisih > 100 rupiah (untuk menghindari floating point issue)
+                        $isDiscounted = ($hargaAsli - $reservasi->total_biaya) > 100;
+                    @endphp
+
+                    @if ($isDiscounted)
+                        <span class="block text-xs text-gray-400 line-through">
+                            Rp {{ number_format($hargaAsli,0,',','.') }}
+                        </span>
+                        <span class="block text-[10px] text-rose-500 font-semibold">
+                            Hemat Rp {{ number_format($hargaAsli - $reservasi->total_biaya,0,',','.') }}
+                        </span>
+                    @endif
+                    <span class="text-base font-bold text-emerald-600">
+                        Rp {{ number_format($reservasi->total_biaya,0,',','.') }}
+                    </span>
+                </div>
             </div>
         </div>
 

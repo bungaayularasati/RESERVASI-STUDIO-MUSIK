@@ -28,7 +28,21 @@ class ReservasiController extends Controller
     public function create($studio)
     {
         $studio = Studio::findOrFail($studio);
-        return view('users.reservasi.create', compact('studio'));
+
+        $riwayatCount = Reservasi::where('user_id', Auth::id())
+            ->whereIn('status', ['selesai', 'dibayar'])
+            ->count();
+
+        $diskon = 0;
+        if ($riwayatCount >= 20) {
+            $diskon = 0.25;
+        } elseif ($riwayatCount >= 10) {
+            $diskon = 0.10;
+        } elseif ($riwayatCount >= 5) {
+            $diskon = 0.05;
+        }
+
+        return view('users.reservasi.create', compact('studio', 'diskon'));
     }
 
     // SIMPAN RESERVASI
@@ -79,6 +93,21 @@ class ReservasiController extends Controller
         $studio = Studio::findOrFail($request->studio_id);
         $durasiJam = (strtotime($request->jam_selesai) - strtotime($request->jam_dimulai)) / 3600;
         $total = $durasiJam * $studio->harga_per_jam;
+
+        /* =============================
+           DISKON LOGIC
+        ============================== */
+        $riwayatCount = Reservasi::where('user_id', Auth::id())
+            ->whereIn('status', ['selesai', 'dibayar'])
+            ->count();
+
+        if ($riwayatCount >= 20) {
+            $total = $total * 0.75; // Diskon 25%
+        } elseif ($riwayatCount >= 10) {
+            $total = $total * 0.90; // Diskon 10%
+        } elseif ($riwayatCount >= 5) {
+            $total = $total * 0.95; // Diskon 5%
+        }
 
         /* =============================
            SIMPAN JADWAL

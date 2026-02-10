@@ -32,12 +32,14 @@ class RegisteredUserController extends Controller
         $request->validate([
             'nama' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', 'min:6'],
+            'no_hp' => ['required', 'string', 'max:20'],
+            'password' => ['required', 'min:6'],
         ]);
 
         $user = User::create([
             'nama' => $request->nama,
             'email' => $request->email,
+            'no_hp' => $request->no_hp,
             'password' => Hash::make($request->password),
             'role' => 'users',
         ]);
@@ -46,6 +48,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('users.dashboard');
+        return redirect()->route('users.studio');
     }
 }

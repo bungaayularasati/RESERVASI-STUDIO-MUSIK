@@ -55,9 +55,10 @@
     </form>
 </div>
 
-<!-- STATISTIK -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<!-- STATISTIK + CETAK -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
 
+    <!-- Total Pendapatan -->
     <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
         <p class="text-sm text-gray-500 mb-1">💰 Total Pendapatan</p>
         <p class="text-2xl font-bold text-green-600">
@@ -65,6 +66,7 @@
         </p>
     </div>
 
+    <!-- Jumlah Transaksi -->
     <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
         <p class="text-sm text-gray-500 mb-1">📦 Jumlah Transaksi</p>
         <p class="text-2xl font-bold text-gray-800">
@@ -72,7 +74,30 @@
         </p>
     </div>
 
+    <!-- Tombol Cetak -->
+    <form action="{{ route('admin.laporan.pendapatan.cetak') }}"
+          method="GET"
+          target="_blank"
+          class="flex items-center justify-center">
+
+        <input type="hidden" name="tanggal_mulai" value="{{ request('tanggal_mulai') }}">
+        <input type="hidden" name="tanggal_selesai" value="{{ request('tanggal_selesai') }}">
+        <input type="hidden" name="studio_id" value="{{ request('studio_id') }}">
+
+        <button type="submit"
+           class="bg-green-600 hover:bg-green-700
+       text-white text-sm font-semibold
+       px-4 py-2 rounded-lg shadow
+       flex items-center gap-2
+       transition">
+            🖨 Cetak Laporan
+        </button>
+    </form>
+
+
 </div>
+
+
 
 <!-- DETAIL TRANSAKSI -->
 <div class="bg-white p-5 rounded-xl mb-6 border border-gray-200 shadow-sm overflow-x-auto">

@@ -62,6 +62,21 @@
                 <p class="text-[11px] uppercase tracking-wide text-slate-500 mb-1">
                     Total biaya
                 </p>
+                @php
+                    $durasiJam = (strtotime($reservasi->jadwal->jam_selesai) - strtotime($reservasi->jadwal->jam_dimulai)) / 3600;
+                    $hargaAsli = $durasiJam * $reservasi->studio->harga_per_jam;
+                    $isDiscounted = ($hargaAsli - $reservasi->total_biaya) > 100;
+                @endphp
+
+                @if ($isDiscounted)
+                    <p class="text-sm text-gray-400 line-through">
+                        Rp {{ number_format($hargaAsli, 0, ',', '.') }}
+                    </p>
+                    <p class="text-xs text-rose-500 font-semibold mb-1">
+                        Diskon 
+                    </p>
+                @endif
+
                 <p class="text-lg font-bold text-emerald-600">
                     Rp {{ number_format($reservasi->total_biaya, 0, ',', '.') }}
                 </p>

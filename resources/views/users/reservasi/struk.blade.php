@@ -56,11 +56,24 @@
     <hr class="my-4">
 
     {{-- TOTAL --}}
-    <div class="grid grid-cols-[1fr_auto] text-lg font-bold">
+    <div class="grid grid-cols-[1fr_auto] text-lg font-bold items-center">
         <span>Total Bayar</span>
-        <span class="text-green-600">
-            Rp {{ number_format($reservasi->total_biaya,0,',','.') }}
-        </span>
+        <div class="text-right">
+            @php
+                $durasiJam = (strtotime($reservasi->jadwal->jam_selesai) - strtotime($reservasi->jadwal->jam_dimulai)) / 3600;
+                $hargaAsli = $durasiJam * $reservasi->studio->harga_per_jam;
+                $isDiscounted = ($hargaAsli - $reservasi->total_biaya) > 100;
+            @endphp
+
+            @if ($isDiscounted)
+                <span class="block text-sm text-gray-400 line-through font-normal">
+                    Rp {{ number_format($hargaAsli,0,',','.') }}
+                </span>
+            @endif
+            <span class="text-green-600">
+                Rp {{ number_format($reservasi->total_biaya,0,',','.') }}
+            </span>
+        </div>
     </div>
 
     {{-- FOOTER --}}
@@ -71,7 +84,7 @@
 
     {{-- BUTTON --}}
     <div class="mt-6 flex gap-2 no-print">
-        <a href="{{ route('users.dashboard') }}"
+        <a href="{{ route('users.studio') }}"
            class="w-full text-center bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 rounded font-semibold">
             Kembali
         </a>

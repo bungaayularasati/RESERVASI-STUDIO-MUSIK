@@ -11,6 +11,9 @@ class PembayaranController extends Controller
     public function index()
     {
         $pembayaran = Pembayaran::with('reservasi.user','reservasi.studio','reservasi.jadwal')
+            ->whereHas('reservasi.jadwal', function($query) {
+                $query->whereDate('tanggal', '>=', now()->toDateString());
+            })
             ->latest()
             ->get();
 

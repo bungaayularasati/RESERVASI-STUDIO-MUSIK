@@ -13,7 +13,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->get();
+        $users = User::withCount(['reservasis as total_pesanan' => function ($query) {
+            $query->whereIn('status', ['selesai', 'dibayar']);
+        }])->latest()->get();
+        
         return view('admin.users.index', compact('users'));
     }
 
@@ -33,6 +36,7 @@ class UserController extends Controller
         $request->validate([
             'nama' => 'required',
             'email' => 'required|email|unique:users',
+            'no_hp' => 'nullable|string|max:20',
             'password' => 'required|min:6',
             'role' => 'required'
         ]);
@@ -40,6 +44,7 @@ class UserController extends Controller
         User::create([
             'nama' => $request->nama,
             'email' => $request->email,
+            'no_hp' => $request->no_hp,
             'password' => Hash::make($request->password),
             'role' => $request->role
         ]);
@@ -72,12 +77,14 @@ class UserController extends Controller
         $request->validate([
             'nama' => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id,
+            'no_hp' => 'nullable|string|max:20',
             'role' => 'required'
         ]);
 
         $data = [
             'nama' => $request->nama,
             'email' => $request->email,
+            'no_hp' => $request->no_hp,
             'role' => $request->role
         ];
 

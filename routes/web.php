@@ -11,13 +11,14 @@ use App\Http\Controllers\Admin\JadwalController as AdminJadwal;
 use App\Http\Controllers\Admin\ReservasiController as AdminReservasi;
 use App\Http\Controllers\Admin\PembayaranController as AdminPembayaran;
 use App\Http\Controllers\Admin\MetodePembayaranController as AdminMetodePembayaran;
+use App\Http\Controllers\Admin\ChatController as AdminChat;
 
 // USER
-use App\Http\Controllers\User\DashboardController as UserDashboard;
 use App\Http\Controllers\User\StudioController as UserStudio;
 use App\Http\Controllers\User\JadwalController as UserJadwal;
 use App\Http\Controllers\User\ReservasiController as UserReservasi;
 use App\Http\Controllers\User\PembayaranController as UserPembayaran;
+use App\Http\Controllers\User\ChatController as UserChat;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +28,7 @@ use App\Http\Controllers\User\PembayaranController as UserPembayaran;
 Route::get('/', function () {
     if (auth()->check()) {
         $user = auth()->user();
-        $dashboardRoute = $user && $user->role === 'admin' ? 'admin.dashboard' : 'users.dashboard';
+        $dashboardRoute = $user && $user->role === 'admin' ? 'admin.dashboard' : 'users.studio';
 
         return redirect()->route($dashboardRoute);
     }
@@ -72,6 +73,8 @@ Route::prefix('admin')
         Route::put('/reservasi/{reservasi}', [AdminReservasi::class, 'update'])->name('reservasi.update');
         Route::delete('/reservasi/{reservasi}', [AdminReservasi::class, 'destroy'])->name('reservasi.destroy');
         Route::get('/laporan/pendapatan', [AdminReservasi::class, 'laporan'])->name('laporan.pendapatan');
+        Route::get('/laporan/pendapatan/cetak',[AdminReservasi::class, 'cetakLaporan'])->name('laporan.pendapatan.cetak');
+
 
         // USERS
         Route::resource('users', UserController::class);
@@ -82,6 +85,11 @@ Route::prefix('admin')
         Route::post('/pembayaran/{id}/invalid', [AdminPembayaran::class, 'invalid'])->name('pembayaran.invalid');
         Route::get('/pembayaran/{id}/bukti', [AdminPembayaran::class, 'bukti'])
     ->name('pembayaran.bukti');
+
+        // CHAT
+        Route::get('/chat', [AdminChat::class, 'index'])->name('chat.index');
+        Route::get('/chat/{user}', [AdminChat::class, 'showByUser'])->name('chat.show');
+        Route::post('/chat/{user}/reply', [AdminChat::class, 'reply'])->name('chat.reply');
 
     });
 
@@ -94,8 +102,6 @@ Route::prefix('users')
     ->middleware(['auth', 'role:users'])
     ->name('users.')
     ->group(function () {
-
-        Route::get('/dashboard', [UserDashboard::class, 'index'])->name('dashboard');
 
         Route::get('/studio', [UserStudio::class, 'index'])->name('studio');
         Route::get('/studio/{id}', [UserStudio::class, 'show'])->name('studio.detail');
@@ -114,6 +120,9 @@ Route::prefix('users')
         Route::post('/pembayaran', [UserPembayaran::class, 'store'])->name('pembayaran.store');
         Route::get('/pembayaran/qris/{pembayaran}', [UserPembayaran::class, 'showQris'])->name('pembayaran.qris');
 
+        // CHAT
+        Route::get('/chat', [UserChat::class, 'index'])->name('chat.index');
+        Route::post('/chat', [UserChat::class, 'store'])->name('chat.store');
 
     });
 
